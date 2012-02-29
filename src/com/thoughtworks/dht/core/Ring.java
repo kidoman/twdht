@@ -5,7 +5,7 @@ import java.util.TreeSet;
 
 /* Understands network topology of nodes */
 public class Ring<TKey, TValue> {
-    private final SortedSet<Node<TKey, TValue>> nodes;
+    private final TreeSet<Node<TKey, TValue>> nodes;
 
     public Ring() {
         this.nodes = new TreeSet<Node<TKey, TValue>>();
@@ -21,7 +21,7 @@ public class Ring<TKey, TValue> {
 
     public void put(TKey key, TValue value) {
         validateState(key);
-
+        
         for(Node<TKey, TValue> node : nodes){
             if(node.canStore(key)){
                 node.put(key, value);

@@ -4,6 +4,7 @@ import com.thoughtworks.dht.core.Node;
 import com.thoughtworks.dht.core.Ring;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class RingTest {
     @Test(expected = IllegalStateException.class)
@@ -39,6 +40,42 @@ public class RingTest {
         assertEquals("value1", ring.get("key1"));
         assertEquals("value3", ring.get("key3"));
         assertEquals("value2", ring.get("key2"));
+    }
+    
+    @Test
+    public void storesDataInTheAppropriateNode() {
+        Node n1 = mock(Node.class), n2 = mock(Node.class), n3 = mock(Node.class);
+
+        when(n1.canStore("key")).thenReturn(false);
+        when(n2.canStore("key")).thenReturn(true);
+        when(n3.canStore("key")).thenReturn(false);
+
+        Ring ring = new Ring();
+        ring.addNode(n1);
+        ring.addNode(n2);
+        ring.addNode(n3);
+
+        ring.put("key", "value");
+
+        verify(n2).put("key", "value");
+    }
+    
+    @Test
+    public void storesTheDataInTheFirstNodeWhenNoneOfTheNodesWantToStoreData() {
+        Node n1 = mock(Node.class), n2 = mock(Node.class), n3 = mock(Node.class);
+        
+        when(n1.canStore("key")).thenReturn(false);
+        when(n2.canStore("key")).thenReturn(false);
+        when(n3.canStore("key")).thenReturn(false);
+        
+        Ring ring = new Ring();
+        ring.addNode(n1);
+        ring.addNode(n2);
+        ring.addNode(n3);
+        
+        ring.put("key", "value");
+
+        verify(n1).put("key", "value");
     }
     
     @Test
