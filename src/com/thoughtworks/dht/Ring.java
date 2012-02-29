@@ -1,16 +1,18 @@
 package com.thoughtworks.dht;
 
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /* Understands network topology of nodes */
 public class Ring<TKey, TValue> {
-    private final TreeSet<Node<TKey, TValue>> nodes;
+    private final TreeMap<Double, Node<TKey, TValue>> nodes;
+    private final NodeLookupStrategy<TKey, TValue> lookupStrategy;
 
-    public Ring() {
-        this.nodes = new TreeSet<Node<TKey, TValue>>();
+    public Ring(NodeLookupStrategy lookupStrategy) {
+        this.lookupStrategy = lookupStrategy;
+        this.nodes = new TreeMap<Double, Node<TKey, TValue>>();
     }
 
     private void validateState(TKey key) {
@@ -18,44 +20,24 @@ public class Ring<TKey, TValue> {
         checkNotNull(key, "Null key is not allowed.");
     }
 
-    private interface NodeIdentifiedAction<TKey, TValue> {
-        TValue apply(Node<TKey, TValue> node, TKey key);
-    }
-    
-    private TValue traverseNodes(TKey key, NodeIdentifiedAction<TKey, TValue> func) {
-        for(Node<TKey, TValue> node : nodes)
-            if(node.canStore(key))
-                return func.apply(node, key);
-        
-        return func.apply(nodes.first(), key);
+    private Node<TKey, TValue> lookupNode(TKey key) {
+        return lookupStrategy.lookup(nodes, key);
     }
 
-    public void put(TKey key, final TValue value) {
+    public void put(TKey key, TValue value) {
         validateState(key);
 
-        traverseNodes(key, new NodeIdentifiedAction<TKey, TValue>() {
-            @Override
-            public TValue apply(Node<TKey, TValue> node, TKey key) {
-                node.put(key, value);
-
-                return null;
-            }
-        });
+        lookupNode(key).put(key, value);
     }
 
     public TValue get(TKey key) {
         validateState(key);
 
-        return traverseNodes(key, new NodeIdentifiedAction<TKey, TValue>() {
-            @Override
-            public TValue apply(Node<TKey, TValue> node, TKey key) {
-                return node.get(key);
-            }
-        });
+        return lookupNode(key).get(key);
     }
 
-    public void addNode(Node<TKey, TValue> node) {
-        nodes.add(node);
+    public void addNode(double index, Node<TKey, TValue> node) {
+        nodes.put(index, node);
     }
 
     public int totalNodes() {
