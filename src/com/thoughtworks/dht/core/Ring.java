@@ -54,7 +54,7 @@ public class Ring<TKey, TValue> {
         });
     }
 
-    public void addNode(Node node) {
+    public void addNode(Node<TKey, TValue> node) {
         nodes.add(node);
     }
 
