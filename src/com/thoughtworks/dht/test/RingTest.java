@@ -1,7 +1,7 @@
 package com.thoughtworks.dht.test;
 
-import com.thoughtworks.dht.core.Node;
-import com.thoughtworks.dht.core.Ring;
+import com.thoughtworks.dht.Node;
+import com.thoughtworks.dht.Ring;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

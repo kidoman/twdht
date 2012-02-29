@@ -1,8 +1,7 @@
-package com.thoughtworks.dht.core;
+package com.thoughtworks.dht;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
-import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 
 import java.util.HashMap;

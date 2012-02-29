@@ -1,4 +1,4 @@
-package com.thoughtworks.dht.core;
+package com.thoughtworks.dht;
 
 import java.util.TreeSet;
 

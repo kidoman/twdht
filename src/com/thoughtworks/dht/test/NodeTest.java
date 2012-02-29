@@ -1,6 +1,6 @@
 package com.thoughtworks.dht.test;
 
-import com.thoughtworks.dht.core.Node;
+import com.thoughtworks.dht.Node;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

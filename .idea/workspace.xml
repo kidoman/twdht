@@ -63,33 +63,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="RingTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/test/RingTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="13" selection-start="277" selection-end="277" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NodeTest.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="NodeTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/test/NodeTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="36" selection-end="36" vertical-scroll-proportion="-0.8625277">
+            <state line="39" column="5" selection-start="994" selection-end="994" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="e#1103#1119#0" expanded="true" />
-                <element signature="e#1283#1299#0" expanded="true" />
+                <element signature="e#1098#1114#0" expanded="true" />
+                <element signature="e#1278#1294#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="Node.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/core/Node.java">
+        <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/Node.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="31" selection-start="590" selection-end="590" vertical-scroll-proportion="0.0">
+            <state line="15" column="31" selection-start="547" selection-end="547" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -97,10 +86,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Ring.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/core/Ring.java">
+      <file leaf-file-name="RingTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/test/RingTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="41" selection-start="1657" selection-end="1657" vertical-scroll-proportion="0.0">
+            <state line="10" column="13" selection-start="267" selection-end="267" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Ring.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/Ring.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="36" selection-start="600" selection-end="600" vertical-scroll-proportion="-0.033259425">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -204,10 +204,6 @@
               <option name="myItemId" value="dht" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -227,7 +223,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -642,18 +638,19 @@
         <state line="0" column="7" selection-start="7" selection-end="7" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/core/Node.java">
+    <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/test/NodeTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="31" selection-start="590" selection-end="590" vertical-scroll-proportion="0.0">
+        <state line="39" column="5" selection-start="994" selection-end="994" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#1098#1114#0" expanded="true" />
+            <element signature="e#1278#1294#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/core/Ring.java">
+    <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/Node.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="41" selection-start="1657" selection-end="1657" vertical-scroll-proportion="0.0">
+        <state line="15" column="31" selection-start="547" selection-end="547" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -662,19 +659,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/test/RingTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="277" selection-end="277" vertical-scroll-proportion="0.0">
+        <state line="10" column="13" selection-start="267" selection-end="267" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/test/NodeTest.java">
+    <entry file="file://$PROJECT_DIR$/src/com/thoughtworks/dht/Ring.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="36" selection-end="36" vertical-scroll-proportion="-0.8625277">
+        <state line="20" column="36" selection-start="600" selection-end="600" vertical-scroll-proportion="-0.033259425">
           <folding>
-            <element signature="e#1103#1119#0" expanded="true" />
-            <element signature="e#1283#1299#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
