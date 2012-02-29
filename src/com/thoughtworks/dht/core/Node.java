@@ -2,12 +2,16 @@ package com.thoughtworks.dht.core;
 
 import java.util.HashMap;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /* Understands an addressable shard in a distributed key value store */
 public class Node<TKey, TValue> implements Comparable<Node<TKey, TValue>> {
     private final HashMap<TKey, TValue> store;
     private final double index;
 
     public Node(double index) {
+        checkArgument(index >= 0 && index <= 1, "Index should be between 0 and 1 (inclusive.) Was given %s", index);
+
         store = new HashMap<TKey, TValue>();
         this.index = index;
     }

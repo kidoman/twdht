@@ -6,6 +6,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class NodeTest {
+    @Test(expected = IllegalArgumentException.class)
+    public void canOnlyCreateNodeWithPositiveNonZeroIndex() {
+        new Node(-0.1);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void canOnlyCreateNodeWithIndexLessThanOne() {
+        new Node(1.1);
+    }
+    
     @Test
     public void canStoreData() {
         Node<String, String> node = new Node(0.1);
