@@ -1,17 +1,16 @@
 package com.thoughtworks.dht.contenthashing;
 
-import com.thoughtworks.dht.contenthashing.Node;
-import com.thoughtworks.dht.contenthashing.NodeLookupStrategy;
-import com.thoughtworks.dht.contenthashing.Ring;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.*;
 
 public class RingTest {
+
     @Test(expected = IllegalStateException.class)
     public void addingDataWithoutNodesFails() {
-        new Ring<String, String>(new NodeLookupStrategy()).put("key", "value");
+        new Ring<String, String>(new NodeLookupStrategy(new HashingStrategy())).put("key", "value");
     }
 
     @Test
@@ -45,6 +44,38 @@ public class RingTest {
     }
 
     @Test
+    public void storesTheDataInTheFirstNodeIfNoneOfTheNodesMatch() {
+        HashingStrategy<String> hashingStrategy = mock(HashingStrategy.class);
+        Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>(hashingStrategy));
+        Node<String, String> firstNode = mock(Node.class);
+        ring.addNode(0.2, firstNode);
+        ring.addNode(0.3, new Node<String, String>());
+        ring.addNode(0.4, new Node<String, String>());
+
+        when(hashingStrategy.index("key")).thenReturn(0.5);
+
+        ring.put("key", "value");
+
+        verify(firstNode, atMost(1)).put("key", "value");
+    }
+
+    @Test
+    public void retrievesTheDataFromTheFirstNodeIfNoneOfTheNodesMatch() {
+        HashingStrategy<String> hashingStrategy = mock(HashingStrategy.class);
+        Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>(hashingStrategy));
+        Node<String, String> firstNode = mock(Node.class);
+        ring.addNode(0.2, firstNode);
+        ring.addNode(0.3, new Node<String, String>());
+        ring.addNode(0.4, new Node<String, String>());
+
+        when(hashingStrategy.index("key")).thenReturn(0.5);
+
+        ring.get("key");
+
+        verify(firstNode, atMost(1)).get("key");
+    }
+
+    @Test
     public void returnsNullForMissingKey() {
         Ring<String, String> ring = withEquallySpacedNodes(2);
 
@@ -53,7 +84,7 @@ public class RingTest {
 
     @Test
     public void canProvideTotalNodeCount() {
-        assertEquals(0, new Ring(new NodeLookupStrategy()).totalNodes());
+        assertEquals(0, new Ring(new NodeLookupStrategy(new HashingStrategy())).totalNodes());
     }
 
     @Test
@@ -64,7 +95,7 @@ public class RingTest {
     }
 
     private Ring<String, String> withEquallySpacedNodes(int nodes) {
-        Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>());
+        Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>(new HashingStrategy<String>()));
         double spacing = 1.0 / nodes;
         for (int i = 0; i < nodes; i++)
             ring.addNode(i * spacing, new Node<String, String>());

@@ -2,6 +2,8 @@ package com.thoughtworks.dht.contentaddressable;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -42,48 +44,50 @@ public class NodeTest {
     public void canSplitItselfHorizontallyAndStillBeNeighbours() {
         Node parentNode = from(0.0, 0.0, 1.0, 1.0);
         
-        Node[] split = parentNode.splitHorizontal();
+        List<Node> split = parentNode.splitHorizontal();
         
-        assertEquals(2, split.length);
-        assertTrue(split[0].isAdjacentTo(split[1]));
-        assertTrue(split[1].isAdjacentTo(split[0]));
+        assertEquals(2, split.size());
+        assertTrue(split.get(0).isAdjacentTo(split.get(1)));
+        assertTrue(split.get(1).isAdjacentTo(split.get(0)));
     }
 
     @Test
     public void canSplitItselfVerticallyAndStillBeNeighbours() {
         Node parentNode = from(0.0, 0.0, 1.0, 1.0);
 
-        Node[] split = parentNode.splitVertical();
+        List<Node> split = parentNode.splitVertical();
 
-        assertEquals(2, split.length);
-        assertTrue(split[0].isAdjacentTo(split[1]));
-        assertTrue(split[1].isAdjacentTo(split[0]));
+        assertEquals(2, split.size());
+        assertTrue(split.get(0).isAdjacentTo(split.get(1)));
+        assertTrue(split.get(1).isAdjacentTo(split.get(0)));
     }
     
     @Test
-    public void canSplitItselfThreeTimesAndAllOfThemWillStillBeNeighbours() {
+    public void canSplitItselfMultipleTimesAndHaveProperNeighbours() {
         Node parentNode = from(0.0, 0.0, 1.0, 1.0);
         
-        Node[] split1 = parentNode.splitHorizontal();
-        Node[] split2 = split1[0].splitVertical();
+        List<Node> split1 = parentNode.splitHorizontal();
+        List<Node> split2 = split1.get(0).splitVertical();
+        List<Node> split3 = split1.get(1).splitHorizontal();
 
         /* Testing structure:
          *
          *   +++++++++++++++++
          *   +       +       +
-         *   +       +       +
+         *   + s2.0  + s2.0  +
          *   +       +       +
          *   +++++++++++++++++
-         *   +               +
-         *   +               +
-         *   +               +
+         *   +      s3.0     +
+         *   +++++++++++++++++
+         *   +      s3.1     +
          *   +++++++++++++++++
          *
          */
 
-        assertNeighboursWith(split1[1], split2);
-        assertNeighboursWith(split2[0], split1[1], split2[1]);
-        assertNeighboursWith(split2[1], split1[1], split2[0]);
+        assertNeighboursWith(split2.get(0), split2.get(1), split3.get(0));
+        assertNeighboursWith(split2.get(1), split2.get(0), split3.get(0));
+        assertNeighboursWith(split3.get(0), split2.get(0), split2.get(1), split3.get(1));
+        assertNeighboursWith(split3.get(1), split3.get(0));
     }
     
     private void assertNeighboursWith(Node parentNode, Node... nodes) {
