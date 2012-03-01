@@ -21,9 +21,18 @@ public class Node<TKey, TValue> {
         return values.get(key);
     }
 
-    public void syncWith(double index, Node<TKey, TValue> newNode) {
+    public void copyDataTo(double newNodeIndex, Node<TKey, TValue> newNode) {
         for (Map.Entry<TKey, TValue> value : values.entrySet()) {
-            if (hashingStrategy.index(value.getKey()) <= index) {
+            if (hashingStrategy.index(value.getKey()) <= newNodeIndex) {
+                newNode.put(value.getKey(), value.getValue());
+                values.remove(value.getKey());
+            }
+        }
+    }
+
+    public void copyOutOfIndexDataTo(double myIndex, Node<TKey, TValue> newNode) {
+        for(Map.Entry<TKey, TValue> value : values.entrySet()) {
+            if (hashingStrategy.index(value.getKey()) > myIndex) {
                 newNode.put(value.getKey(), value.getValue());
                 values.remove(value.getKey());
             }

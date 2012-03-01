@@ -38,16 +38,18 @@ public class Ring<TKey, TValue> {
     }
 
     public void addNode(double index, Node<TKey, TValue> node) {
-        Map.Entry<Double, Node<TKey, TValue>> entry = nodes.ceilingEntry(index);
+        if (nodes.size() > 0) {
+            Map.Entry<Double, Node<TKey, TValue>> firstNodeEntry = nodes.firstEntry();
+            Map.Entry<Double, Node<TKey, TValue>> entry = nodes.ceilingEntry(index);
+            Node<TKey, TValue> nextNode = entry == null ? firstNodeEntry.getValue() : entry.getValue();
+
+            nextNode.copyDataTo(index, node);
+
+            if (firstNodeEntry.getKey() > index)
+                firstNodeEntry.getValue().copyOutOfIndexDataTo(firstNodeEntry.getKey(), node);
+        }
+
         nodes.put(index, node);
-
-        Node<TKey, TValue> nextNode;
-        if (entry == null)
-            nextNode = nodes.firstEntry().getValue();
-        else
-            nextNode = entry.getValue();
-
-        nextNode.syncWith(index, node);
     }
 
     public int totalNodes() {

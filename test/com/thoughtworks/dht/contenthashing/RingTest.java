@@ -75,6 +75,37 @@ public class RingTest {
         assertEquals("value", ring.get("key"));
         verify(firstNode, atMost(1)).get("key");
     }
+    
+    @Test
+    public void doesNotInvokeSyncIfAddingFirstNode() {
+        Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>(new HashingStrategy<String>()));
+        Node<String, String> nodeToBeAdded = mock(Node.class);
+        
+        ring.addNode(0.5, nodeToBeAdded);
+        
+        verify(nodeToBeAdded, never()).copyDataTo(anyDouble(), any(Node.class));
+    }
+    
+    @Test
+    public void addingANodeBeforeTheOnlyNodeInTheRingTransfersFirstNodeInformationToTheNewlyAddedNode() {
+        HashingStrategy<String> hashingStrategy = mock(HashingStrategy.class);
+        Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>(hashingStrategy));
+
+        when(hashingStrategy.index("key")).thenReturn(0.4);
+
+        Node<String, String> oldFirstNode = new Node<String, String>(hashingStrategy);
+        
+        ring.addNode(0.2, oldFirstNode);
+        ring.put("key", "value");
+        
+        Node<String, String> newFirstNode = new Node<String, String>(hashingStrategy);
+        
+        ring.addNode(0.1, newFirstNode);
+        
+        assertEquals("value", ring.get("key"));
+        assertEquals("value", newFirstNode.get("key"));
+        assertNull(oldFirstNode.get("key"));
+    }
 
     @Test
     public void returnsNullForMissingKey() {
