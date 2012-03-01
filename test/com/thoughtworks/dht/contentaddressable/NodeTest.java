@@ -67,6 +67,20 @@ public class NodeTest {
         Node[] split1 = parentNode.splitHorizontal();
         Node[] split2 = split1[0].splitVertical();
 
+        /* Testing structure:
+         *
+         *   +++++++++++++++++
+         *   +       +       +
+         *   +       +       +
+         *   +       +       +
+         *   +++++++++++++++++
+         *   +               +
+         *   +               +
+         *   +               +
+         *   +++++++++++++++++
+         *
+         */
+
         assertNeighboursWith(split1[1], split2);
         assertNeighboursWith(split2[0], split1[1], split2[1]);
         assertNeighboursWith(split2[1], split1[1], split2[0]);
