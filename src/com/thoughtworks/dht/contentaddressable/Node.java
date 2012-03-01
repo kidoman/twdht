@@ -11,13 +11,13 @@ public class Node {
     }
     
     private boolean sharesHorizontalEdgeWith(Node other) {
-        return this.topRight.verticallyAlignedTo(other.bottomLeft) &&
-               this.topRight.aheadOfHorizontally(other.bottomLeft);
+        return topRight.verticallyAlignedTo(other.bottomLeft) &&
+               ((topRight.aheadOfHorizontally(other.bottomLeft) && other.topRight.aheadOfHorizontally(bottomLeft)));
     }
     
     private boolean sharesVerticalEdgeWith(Node other) {
-        return this.topRight.horizontallyAlignedTo(other.bottomLeft) &&
-               this.topRight.aheadOfVertically(other.bottomLeft);
+        return topRight.horizontallyAlignedTo(other.bottomLeft) &&
+               ((topRight.aheadOfVertically(other.bottomLeft) && other.topRight.aheadOfVertically(bottomLeft)));
     }
 
     public boolean isAdjacentTo(Node other) {

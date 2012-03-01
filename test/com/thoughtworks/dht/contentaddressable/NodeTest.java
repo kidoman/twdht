@@ -9,6 +9,7 @@ public class NodeTest {
     @Test
     public void diagonalAdjacentNodesAreNotNeighbours() {
         assertFalse(new Node(new Point(0.0, 0.0), new Point(0.5, 0.5)).isAdjacentTo(new Node(new Point(0.5, 0.5), new Point(1, 1))));
+        assertFalse(new Node(new Point(0, 0.25), new Point(0.25, 0.5)).isAdjacentTo(new Node(new Point(0.25, 0), new Point(0.5, 0.25))));
     }
 
     @Test
@@ -30,11 +31,9 @@ public class NodeTest {
     public void nodesStackedHorizontallyButNotAdjacentAreNotNeighbours() {
         assertFalse(new Node(new Point(0.0, 0.0), new Point(0.5, 0.5)).isAdjacentTo(new Node(new Point(0.5, .75), new Point(1, 1))));
     }
-    
+
     @Test
     public void nonStackedNodesAreNotNeighbours() {
         assertFalse(new Node(new Point(0.0, 0.0), new Point(0.25, 0.25)).isAdjacentTo(new Node(new Point(0.5, 0.5), new Point(1, 1))));
     }
-    
-
 }
