@@ -1,4 +1,4 @@
-package com.thoughtworks.dht;
+package com.thoughtworks.dht.contenthashing;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;

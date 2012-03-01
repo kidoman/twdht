@@ -1,5 +1,7 @@
-package com.thoughtworks.dht;
+package com.thoughtworks.dht.contenthashing;
 
+import com.thoughtworks.dht.contenthashing.Node;
+import com.thoughtworks.dht.contenthashing.NodeLookupStrategy;
 import org.junit.Test;
 
 import java.util.TreeMap;

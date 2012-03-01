@@ -1,5 +1,6 @@
-package com.thoughtworks.dht;
+package com.thoughtworks.dht.contenthashing;
 
+import com.thoughtworks.dht.contenthashing.Node;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -1,4 +1,4 @@
-package com.thoughtworks.dht;
+package com.thoughtworks.dht.contenthashing;
 
 import java.util.HashMap;
 
