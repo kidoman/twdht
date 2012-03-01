@@ -1,5 +1,6 @@
 package com.thoughtworks.dht.contenthashing;
 
+import java.util.Map;
 import java.util.TreeMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -37,7 +38,16 @@ public class Ring<TKey, TValue> {
     }
 
     public void addNode(double index, Node<TKey, TValue> node) {
+        Map.Entry<Double, Node<TKey, TValue>> entry = nodes.ceilingEntry(index);
         nodes.put(index, node);
+
+        Node<TKey, TValue> nextNode;
+        if (entry == null)
+            nextNode = nodes.firstEntry().getValue();
+        else
+            nextNode = entry.getValue();
+
+        nextNode.syncWith(index, node);
     }
 
     public int totalNodes() {

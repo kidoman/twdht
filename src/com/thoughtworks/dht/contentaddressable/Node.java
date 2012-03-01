@@ -8,42 +8,42 @@ import java.util.List;
 public class Node {
     private final Point bottomLeft;
     private final Point topRight;
-    
+
     private final List<Node> neighbours;
 
     public Node(Point bottomLeft, Point topRight) {
         this.bottomLeft = bottomLeft;
         this.topRight = topRight;
-        
+
         neighbours = new ArrayList<Node>();
     }
 
     private boolean sharesHorizontalEdgeWith(Node other) {
         return topRight.verticallyAlignedTo(other.bottomLeft) &&
-               topRight.aheadOfHorizontally(other.bottomLeft) &&
-               other.topRight.aheadOfHorizontally(bottomLeft);
+                topRight.aheadOfHorizontally(other.bottomLeft) &&
+                other.topRight.aheadOfHorizontally(bottomLeft);
     }
 
     private boolean sharesVerticalEdgeWith(Node other) {
         return topRight.horizontallyAlignedTo(other.bottomLeft) &&
-               topRight.aheadOfVertically(other.bottomLeft) &&
-               other.topRight.aheadOfVertically(bottomLeft);
+                topRight.aheadOfVertically(other.bottomLeft) &&
+                other.topRight.aheadOfVertically(bottomLeft);
     }
 
     public boolean isAdjacentTo(Node other) {
         return sharesHorizontalEdgeWith(other) || other.sharesHorizontalEdgeWith(this) ||
-               sharesVerticalEdgeWith(other) || other.sharesVerticalEdgeWith(this);
+                sharesVerticalEdgeWith(other) || other.sharesVerticalEdgeWith(this);
     }
-    
+
     private void updateNewBorns(Node oldNode, List<Node> newBornNodes) {
         neighbours.remove(oldNode);
-        for(Node node : newBornNodes)
+        for (Node node : newBornNodes)
             if (isAdjacentTo(node))
                 neighbours.add(node);
     }
-    
+
     private void updateNeighbours(List<Node> newBornNodes) {
-        for(Node node : neighbours)
+        for (Node node : neighbours)
             node.updateNewBorns(this, newBornNodes);
     }
 

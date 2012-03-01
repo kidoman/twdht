@@ -4,48 +4,46 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class NodeTest {
     @Test
     public void diagonalAdjacentNodesAreNotNeighbours() {
-        assertFalse(new Node(new Point(0.0, 0.0), new Point(0.5, 0.5)).isAdjacentTo(new Node(new Point(0.5, 0.5), new Point(1, 1))));
-        assertFalse(new Node(new Point(0, 0.25), new Point(0.25, 0.5)).isAdjacentTo(new Node(new Point(0.25, 0), new Point(0.5, 0.25))));
+        assertFalse(from(0.0, 0.0, 0.5, 0.5).isAdjacentTo(from(0.5, 0.5, 1, 1)));
+        assertFalse(from(0.0, 0.25, 0.25, 0.5).isAdjacentTo(from(0.25, 0, 0.5, 0.25)));
     }
 
     @Test
     public void nodesSharingAHorizontalEdgeAreNeighbours() {
-        assertTrue(new Node(new Point(0.0, 0.0), new Point(0.5, 0.5)).isAdjacentTo(new Node(new Point(0.25, 0.5), new Point(0.75, 1.0))));
+        assertTrue(from(0.0, 0.0, 0.5, 0.5).isAdjacentTo(from(0.25, 0.5, 0.75, 1.0)));
     }
 
     @Test
     public void nodesSharingAVerticalEdgeAreNeighbours() {
-        assertTrue(new Node(new Point(0.0, 0.0), new Point(0.5, 0.5)).isAdjacentTo(new Node(new Point(0.5, 0.25), new Point(1.0, 1.0))));
+        assertTrue(from(0.0, 0.0, 0.5, 0.5).isAdjacentTo(from(0.5, 0.25, 1.0, 1.0)));
     }
 
     @Test
     public void nodesStackedVerticallyButNotAdjacentAreNotNeighbours() {
-        assertFalse(new Node(new Point(0.0, 0.0), new Point(0.5, 0.5)).isAdjacentTo(new Node(new Point(0.6, 0.5), new Point(1, 1))));
+        assertFalse(from(0.0, 0.0, 0.5, 0.5).isAdjacentTo(from(0.6, 0.5, 1, 1)));
     }
 
     @Test
     public void nodesStackedHorizontallyButNotAdjacentAreNotNeighbours() {
-        assertFalse(new Node(new Point(0.0, 0.0), new Point(0.5, 0.5)).isAdjacentTo(new Node(new Point(0.5, .75), new Point(1, 1))));
+        assertFalse(from(0.0, 0.0, 0.5, 0.5).isAdjacentTo(from(0.5, .75, 1, 1)));
     }
 
     @Test
     public void nonStackedNodesAreNotNeighbours() {
-        assertFalse(new Node(new Point(0.0, 0.0), new Point(0.25, 0.25)).isAdjacentTo(new Node(new Point(0.5, 0.5), new Point(1, 1))));
+        assertFalse(from(0.0, 0.0, 0.25, 0.25).isAdjacentTo(from(0.5, 0.5, 1, 1)));
     }
-    
+
     @Test
     public void canSplitItselfHorizontallyAndStillBeNeighbours() {
         Node parentNode = from(0.0, 0.0, 1.0, 1.0);
-        
+
         List<Node> split = parentNode.splitHorizontal();
-        
+
         assertEquals(2, split.size());
         assertTrue(split.get(0).isAdjacentTo(split.get(1)));
         assertTrue(split.get(1).isAdjacentTo(split.get(0)));
@@ -61,11 +59,11 @@ public class NodeTest {
         assertTrue(split.get(0).isAdjacentTo(split.get(1)));
         assertTrue(split.get(1).isAdjacentTo(split.get(0)));
     }
-    
+
     @Test
     public void canSplitItselfMultipleTimesAndHaveProperNeighbours() {
         Node parentNode = from(0.0, 0.0, 1.0, 1.0);
-        
+
         List<Node> split1 = parentNode.splitHorizontal();
         List<Node> split2 = split1.get(0).splitVertical();
         List<Node> split3 = split1.get(1).splitHorizontal();
@@ -89,13 +87,13 @@ public class NodeTest {
         assertNeighboursWith(split3.get(0), split2.get(0), split2.get(1), split3.get(1));
         assertNeighboursWith(split3.get(1), split3.get(0));
     }
-    
+
     private void assertNeighboursWith(Node parentNode, Node... nodes) {
-        for(Node node : nodes)
+        for (Node node : nodes)
             assertTrue(parentNode.isAdjacentTo(node));
     }
 
     private Node from(double blX, double blY, double trX, double trY) {
-        return new Node(new Point(blX, blY), new Point(trX,  trY));
+        return new Node(new Point(blX, blY), new Point(trX, trY));
     }
 }

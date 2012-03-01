@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
 public class RingTest {
-
     @Test(expected = IllegalStateException.class)
     public void addingDataWithoutNodesFails() {
         new Ring<String, String>(new NodeLookupStrategy(new HashingStrategy())).put("key", "value");
@@ -49,8 +48,8 @@ public class RingTest {
         Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>(hashingStrategy));
         Node<String, String> firstNode = mock(Node.class);
         ring.addNode(0.2, firstNode);
-        ring.addNode(0.3, new Node<String, String>());
-        ring.addNode(0.4, new Node<String, String>());
+        ring.addNode(0.3, new Node<String, String>(new HashingStrategy<String>()));
+        ring.addNode(0.4, new Node<String, String>(new HashingStrategy<String>()));
 
         when(hashingStrategy.index("key")).thenReturn(0.5);
 
@@ -63,15 +62,17 @@ public class RingTest {
     public void retrievesTheDataFromTheFirstNodeIfNoneOfTheNodesMatch() {
         HashingStrategy<String> hashingStrategy = mock(HashingStrategy.class);
         Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>(hashingStrategy));
-        Node<String, String> firstNode = mock(Node.class);
+        Node<String, String> firstNode = spy(new Node<String, String>(hashingStrategy));
         ring.addNode(0.2, firstNode);
-        ring.addNode(0.3, new Node<String, String>());
-        ring.addNode(0.4, new Node<String, String>());
+        ring.addNode(0.3, new Node<String, String>(hashingStrategy));
+        ring.addNode(0.4, new Node<String, String>(hashingStrategy));
 
         when(hashingStrategy.index("key")).thenReturn(0.5);
 
-        ring.get("key");
+        ring.put("key", "value");
+        ring.addNode(0.6, new Node<String, String>(hashingStrategy));
 
+        assertEquals("value", ring.get("key"));
         verify(firstNode, atMost(1)).get("key");
     }
 
@@ -94,11 +95,33 @@ public class RingTest {
         assertEquals(1, ring.totalNodes());
     }
 
+    @Test
+    public void getsDataFromNewlyAddedNode() {
+        HashingStrategy<String> hashingStrategy = mock(HashingStrategy.class);
+        Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>(hashingStrategy));
+
+        Node<String, String> oldNode = new Node<String, String>(hashingStrategy);
+
+        ring.addNode(0.2, new Node<String, String>(hashingStrategy));
+        ring.addNode(0.4, oldNode);
+
+        when(hashingStrategy.index("key")).thenReturn(0.29);
+
+        ring.put("key", "value");
+
+        Node<String, String> newNode = spy(new Node<String, String>(hashingStrategy));
+        ring.addNode(0.3, newNode);
+
+        assertEquals("value", ring.get("key"));
+        assertNull(oldNode.get("key"));
+        verify(newNode, atMost(1)).get("key");
+    }
+
     private Ring<String, String> withEquallySpacedNodes(int nodes) {
         Ring<String, String> ring = new Ring<String, String>(new NodeLookupStrategy<String, String>(new HashingStrategy<String>()));
         double spacing = 1.0 / nodes;
         for (int i = 0; i < nodes; i++)
-            ring.addNode(i * spacing, new Node<String, String>());
+            ring.addNode(i * spacing, new Node<String, String>(new HashingStrategy<String>()));
 
         return ring;
     }
