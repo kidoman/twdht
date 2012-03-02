@@ -70,10 +70,11 @@ public class RingTest {
         when(hashingStrategy.index("key")).thenReturn(0.5);
 
         ring.put("key", "value");
-        ring.addNode(0.6, new Node<String, String>(hashingStrategy));
+        Node<String, String> newFirstNode = spy(new Node<String, String>(hashingStrategy));
+        ring.addNode(0.6, newFirstNode);
 
         assertEquals("value", ring.get("key"));
-        verify(firstNode, atMost(1)).get("key");
+        verify(newFirstNode, atLeastOnce()).get("key");
     }
     
     @Test
