@@ -18,7 +18,7 @@ public class NodeTest {
     }
 
     @Test
-    public void copiesProperDataToNewNode() {
+    public void canInheritDataFromNodeWhenAddedAfterTheCurrentFirstNode() {
         HashingStrategy<String> hashingStrategy = mock(HashingStrategy.class);
         Node<String, String> oldNode = new Node<String, String>(hashingStrategy);
 
@@ -26,16 +26,16 @@ public class NodeTest {
 
         oldNode.put("key", "value");
 
-        Node<String, String> newNode = new Node<String, String>(new HashingStrategy<String>());
+        Node<String, String> newNode = new Node<String, String>(hashingStrategy);
 
-        oldNode.copyDataTo(0.3, newNode);
+        newNode.inheritDataFrom(0.3, new NodeAllocation<String, String>(0.4, oldNode));
 
         assertEquals("value", newNode.get("key"));
         assertNull(oldNode.get("key"));
     }
     
     @Test
-    public void copiesOutOfIndexDataToNewNode() {
+    public void copiesOutOfIndexDataToNewNodeWhenAddedInFrontOfTheCurrentFirstNode() {
         HashingStrategy<String> hashingStrategy = mock(HashingStrategy.class);
         Node<String, String> oldNode = new Node<String, String>(hashingStrategy);
         
@@ -44,8 +44,8 @@ public class NodeTest {
         oldNode.put("key", "value");
         
         Node<String, String> newNode = new Node<String, String>(hashingStrategy);
-        
-        oldNode.copyOutOfIndexDataTo(0.2, newNode);
+
+        newNode.inheritDataFrom(0.1, new NodeAllocation<String, String>(0.2, oldNode));
         
         assertEquals("value", newNode.get("key"));
         assertNull(oldNode.get("key"));

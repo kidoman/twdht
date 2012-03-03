@@ -21,21 +21,21 @@ public class Node<TKey, TValue> {
         return values.get(key);
     }
 
-    public void copyDataTo(double newNodeIndex, Node<TKey, TValue> newNode) {
-        for (Map.Entry<TKey, TValue> value : values.entrySet()) {
-            if (hashingStrategy.index(value.getKey()) <= newNodeIndex) {
-                newNode.put(value.getKey(), value.getValue());
-                values.remove(value.getKey());
-            }
+    public void inheritDataFrom(double newNodeIndex, NodeAllocation<TKey, TValue> oldNodeAllocation) {
+        for (Map.Entry<TKey, TValue> value : oldNodeAllocation.node().values.entrySet()) {
+            double valueIndex = hashingStrategy.index(value.getKey());
+
+            boolean valueBelongsInUs = valueIndex <= newNodeIndex;
+            boolean firstNodeValue = valueIndex > oldNodeAllocation.index();
+            boolean replacingFirstNode = newNodeIndex < oldNodeAllocation.index();
+
+            if (valueBelongsInUs || (firstNodeValue && replacingFirstNode))
+                moveFrom(oldNodeAllocation.node(), value);
         }
     }
 
-    public void copyOutOfIndexDataTo(double myIndex, Node<TKey, TValue> newNode) {
-        for(Map.Entry<TKey, TValue> value : values.entrySet()) {
-            if (hashingStrategy.index(value.getKey()) > myIndex) {
-                newNode.put(value.getKey(), value.getValue());
-                values.remove(value.getKey());
-            }
-        }
+    private void moveFrom(Node<TKey, TValue> oldNode, Map.Entry<TKey, TValue> value) {
+        put(value.getKey(), value.getValue());
+        oldNode.values.remove(value.getKey());
     }
 }

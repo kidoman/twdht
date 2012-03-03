@@ -1,28 +1,25 @@
 package com.thoughtworks.dht.contenthashing;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /* Understands network topology of nodes */
 public class Ring<TKey, TValue> {
-    private final TreeMap<Double, Node<TKey, TValue>> nodes;
-    private final NodeLookupStrategy<TKey, TValue> lookupStrategy;
+    private final NodeAllocationMap<TKey, TValue> nodeAllocationMap;
+    private final HashingStrategy<TKey> hashingStrategy;
 
-    public Ring(NodeLookupStrategy lookupStrategy) {
-        this.lookupStrategy = lookupStrategy;
-        this.nodes = new TreeMap<Double, Node<TKey, TValue>>();
+    public Ring(HashingStrategy<TKey> hashingStrategy) {
+        this.hashingStrategy = hashingStrategy;
+        nodeAllocationMap = new NodeAllocationMap<TKey, TValue>();
     }
 
     private void validateState(TKey key) {
-        checkState(!nodes.isEmpty(), "No nodes found.");
+        checkState(!nodeAllocationMap.isEmpty(), "No nodes found.");
         checkNotNull(key, "Null key is not allowed.");
     }
 
-    private Node<TKey, TValue> lookupNode(TKey key) {
-        return lookupStrategy.lookup(nodes, key);
+    private NodeAllocation<TKey, TValue> lookupNode(TKey key) {
+        return nodeAllocationMap.allocationFor(hashingStrategy.index(key));
     }
 
     public void put(TKey key, TValue value) {
@@ -37,22 +34,10 @@ public class Ring<TKey, TValue> {
         return lookupNode(key).get(key);
     }
 
-    public void addNode(double index, Node<TKey, TValue> node) {
-        if (nodes.size() > 0) {
-            Map.Entry<Double, Node<TKey, TValue>> firstNodeEntry = nodes.firstEntry();
-            Map.Entry<Double, Node<TKey, TValue>> entry = nodes.ceilingEntry(index);
-            Node<TKey, TValue> nextNode = entry == null ? firstNodeEntry.getValue() : entry.getValue();
+    public void addNode(double newNodeIndex, Node<TKey, TValue> newNode) {
+        if (!nodeAllocationMap.isEmpty())
+            newNode.inheritDataFrom(newNodeIndex, nodeAllocationMap.allocationFor(newNodeIndex));
 
-            nextNode.copyDataTo(index, node);
-
-            if (firstNodeEntry.getKey() > index)
-                firstNodeEntry.getValue().copyOutOfIndexDataTo(firstNodeEntry.getKey(), node);
-        }
-
-        nodes.put(index, node);
-    }
-
-    public int totalNodes() {
-        return nodes.size();
+        nodeAllocationMap.add(new NodeAllocation<TKey, TValue>(newNodeIndex, newNode));
     }
 }
